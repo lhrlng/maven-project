@@ -12,9 +12,9 @@ pipeline {
                 }
             }
         }
-        stage('Bla1'){
+        stage('Deploy to Staging'){
             steps {
-                echo 'Bla1...'
+                build job: 'deploy-to-staging'
             }
         }
         stage('Bla2'){
