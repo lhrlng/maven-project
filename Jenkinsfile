@@ -1,5 +1,15 @@
 pipeline {
     agent any
+
+    parameters {
+        string(name: 'tomcat_dev', defaultValue: '127.0.0.1:7070', description: 'Staging Server')
+        string(name: 'tomcat_prod', defaultValue: '127.0.0.1:9090', description: 'Production Server')
+    }
+
+    triggers {
+        pollSCM('* * * * *')
+    }
+
     stages{
         stage('Build'){
             steps {
@@ -12,24 +22,18 @@ pipeline {
                 }
             }
         }
-        stage('Deploy to Staging'){
-            steps {
-                build job: 'deploy-to-staging'
-            }
-        }
-        stage('Deploy to Production'){
-            steps {
-                timeout(time:5, unit:'DAYS'){
-                    input message: 'Approve PRODUCTION Deployment?'
+
+        stage('Deployments'){
+            parallel{
+                stage('Deploy to Staging'){
+                    steps{
+                        sh "cp -i **/target/*.war ${params.tomcat_dev}/C:\tomcat-multiple-instances\instance-1\webapps"
+                    }
                 }
-                build job: 'deploy-to-prod'
-            }
-            post{
-                success{
-                    echo 'Code deployed to Production'
-                }
-                failure{
-                    echo ' Deployment failed.'
+                stage('Deploy to Production'){
+                    steps{
+                        sh "cp -i **/target/*.war ${params.tomcat_prod}/C:\tomcat-multiple-instances\instance-1\webapps"
+                    }
                 }
             }
         }
