@@ -17,9 +17,20 @@ pipeline {
                 build job: 'deploy-to-staging'
             }
         }
-        stage('Bla2'){
+        stage('Deploy to Production'){
             steps {
-                echo 'Code Bla2.'
+                timeout(time:5, unit:'DAYS'){
+                    input message: 'Approve PRODUCTION Deployment?'
+                }
+                build job: 'deploy-to-prod'
+            }
+            post{
+                success{
+                    echo 'Code deployed to Production'
+                }
+                failure{
+                    echo ' Deployment failed.'
+                }
             }
         }
     }
