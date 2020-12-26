@@ -27,12 +27,12 @@ pipeline {
             parallel{
                 stage('Deploy to Staging'){
                     steps{
-                        sh "cp -i **/target/*.war ${params.tomcat_dev}/C:\tomcat-multiple-instances\instance-1\webapps"
+                        sh "cp -i **/target/*.war localhost:7070"
                     }
                 }
                 stage('Deploy to Production'){
                     steps{
-                        sh "cp -i **/target/*.war ${params.tomcat_prod}/C:\tomcat-multiple-instances\instance-1\webapps"
+                        sh "cp -i **/target/*.war localhost:9090"
                     }
                 }
             }
