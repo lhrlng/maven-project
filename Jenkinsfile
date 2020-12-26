@@ -27,7 +27,7 @@ pipeline {
             parallel{
                 stage('Deploy to Staging'){
                     steps{
-                        sh "cp http://localhost:8182/job/FullyAutomated/lastSuccessfulBuild/artifact/webapp/target//webapp.war ${tomcat_dev}"
+                        sh "cp http://localhost:8182/job/FullyAutomated/lastSuccessfulBuild/artifact/webapp/target/webapp.war ${tomcat_dev}"
                     }
                 }
                 stage('Deploy to Production'){
